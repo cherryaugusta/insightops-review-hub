@@ -1,4 +1,5 @@
-﻿from rest_framework import generics, response, status, viewsets
+﻿from django.shortcuts import get_object_or_404
+from rest_framework import generics, response, status, viewsets
 from rest_framework.permissions import IsAuthenticated
 
 from apps.api.serializers import (
@@ -82,7 +83,8 @@ class GenerateAnswerAPIView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, briefing_id):
-        briefing = BriefingRequest.objects.get(
+        briefing = get_object_or_404(
+            BriefingRequest,
             id=briefing_id,
             workspace__owner=request.user,
         )
@@ -136,7 +138,8 @@ class AnswerReviewDecisionCreateAPIView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
-        answer = BriefingAnswer.objects.get(
+        answer = get_object_or_404(
+            BriefingAnswer,
             id=self.kwargs["answer_id"],
             request__workspace__owner=request.user,
         )
