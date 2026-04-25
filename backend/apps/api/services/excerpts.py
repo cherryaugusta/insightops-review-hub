@@ -1,7 +1,7 @@
 ﻿from apps.sources.models import SourceDocument, SourceExcerpt
 
 
-def split_text_into_excerpts(raw_text: str, chunk_size: int = 700):
+def split_text_into_excerpts(raw_text: str, chunk_size: int = 150):
     text = raw_text.strip()
     chunks = []
     start = 0
