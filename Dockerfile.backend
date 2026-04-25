@@ -1,0 +1,15 @@
+﻿FROM python:3.12-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+COPY backend/requirements.txt /app/backend/requirements.txt
+RUN pip install --no-cache-dir -r /app/backend/requirements.txt
+
+COPY . /app
+
+WORKDIR /app/backend
+
+CMD ["python", "-c", "import os,socket,time,subprocess,sys; host=os.environ.get('POSTGRES_HOST','db'); port=int(os.environ.get('POSTGRES_PORT','5432')); print(f'Waiting for PostgreSQL at {host}:{port}...'); deadline=time.time()+90; connected=False\nwhile time.time()<deadline:\n    try:\n        with socket.create_connection((host,port),timeout=3): connected=True; break\n    except OSError: time.sleep(1)\nif not connected:\n    print('PostgreSQL did not become available in time', file=sys.stderr); sys.exit(1)\nsubprocess.check_call([sys.executable,'manage.py','migrate']); subprocess.check_call([sys.executable,'manage.py','seed_demo_data']); subprocess.check_call(['gunicorn','config.wsgi:application','--bind','0.0.0.0:8000'])"]
