@@ -1,6 +1,7 @@
-from django.apps import AppConfig
+﻿from django.apps import AppConfig
 
 
 class BriefingsConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'briefings'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "apps.briefings"
+    label = "briefings"
